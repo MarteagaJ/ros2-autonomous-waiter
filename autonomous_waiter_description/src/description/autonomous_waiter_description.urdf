@@ -10,9 +10,9 @@
   <xacro:property name="wheel_width" value="0.02"/>
   <xacro:property name="wheel_ygap" value="0.0025"/>
   <xacro:property name="wheel_zoff" value="0.04"/>
-  <xacro:property name="wheel_xoff" value="0.375"/>
+  <xacro:property name="wheel_xoff" value="0.0375"/>
 
-  <xacro:property name="caster_xoff" value="0.065"/>
+  <xacro:property name="caster_xoff" value="-0.065"/>
 
   <!-- Define intertial property macros  -->
   <xacro:macro name="box_inertia" params="m w h d">
