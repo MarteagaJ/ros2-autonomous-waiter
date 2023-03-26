@@ -1,6 +1,11 @@
 # .vscode
 .vscode/
 
+# ros2 generated files
+autonomous_waiter_description/build
+autonomous_waiter_description/install
+autonomous_waiter_description/log
+
 # Prerequisites
 *.d
 
