@@ -77,6 +77,7 @@ def main():
     qos_profile = QoSProfile(
         reliability=QoSReliabilityPolicy.RMW_QOS_POLICY_RELIABILITY_BEST_EFFORT,
         durability=QoSDurabilityPolicy.RMW_QOS_POLICY_DURABILITY_VOLATILE,
+        depth=10)
 
     depth_qos = node.create_subscription(
         HardwareInterfaceState,
