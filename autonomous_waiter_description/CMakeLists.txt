@@ -7,11 +7,17 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(geometry_msgs REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
+add_executable(odom_pub publishers/odometry_twist_publisher.cpp)
+ament_target_dependencies(odom_pub rclcpp geometry_msgs)
+
 install(
+  TARGETS odom_pub
   DIRECTORY src launch rviz
   DESTINATION share/${PROJECT_NAME}
 )
