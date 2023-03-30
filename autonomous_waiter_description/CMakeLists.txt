@@ -19,11 +19,10 @@ ament_target_dependencies(odom_pub rclcpp geometry_msgs)
 add_executable(odom_sub subscribers/odometry_twist_subscriber.cpp)
 ament_target_dependencies(odom_sub rclcpp geometry_msgs)
 
-install(
-  TARGETS odom_pub odom_sub
-  DIRECTORY src launch rviz
-  DESTINATION share/${PROJECT_NAME}
-)
+install(TARGETS
+  odom_pub
+  odom_sub
+  DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

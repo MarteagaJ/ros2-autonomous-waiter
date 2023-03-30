@@ -4,7 +4,7 @@
 #include <string>
 
 #include "rclcpp/rclcpp.hpp"
-#include "geometry_msgs/msg/Twist.hpp"
+#include "geometry_msgs/msg/twist.hpp"
 
 using namespace std::chrono_literals;
 
@@ -30,7 +30,7 @@ private:
         message.linear.x = 2.0;
         message.angular.z = 1.8;
         count_++;
-        RCLCPP_INFO(this->get_logger(), "Publishing: LinearX => %d, AngularZ => %d", message.linear.x, message.angular.z);
+        RCLCPP_INFO(this->get_logger(), "Publishing: LinearX => %lf, AngularZ => %lf", message.linear.x, message.angular.z);
         publisher_->publish(message);
     }
     rclcpp::TimerBase::SharedPtr timer_;

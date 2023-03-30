@@ -1,7 +1,7 @@
 #include <memory>
 
 #include "rclcpp/rclcpp.hpp"
-#include "geometry_msgs/msg/Twist.hpp"
+#include "geometry_msgs/msg/twist.hpp"
 using std::placeholders::_1;
 
 class OdometryTwistSubscriber : public rclcpp::Node
@@ -17,7 +17,7 @@ class OdometryTwistSubscriber : public rclcpp::Node
   private:
     void topic_callback(const geometry_msgs::msg::Twist & msg) const
     {
-      RCLCPP_INFO(this->get_logger(), "I heard: LinearX => %d, AngularZ => %d", msg.linear.x, msg.angular.z);
+      RCLCPP_INFO(this->get_logger(), "I heard: LinearX => %lf, AngularZ => %lf", msg.linear.x, msg.angular.z);
     }
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr subscription_;
 };
