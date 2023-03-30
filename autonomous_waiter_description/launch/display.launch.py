@@ -32,6 +32,16 @@ def generate_launch_description():
         output='screen',
         arguments=['-d', LaunchConfiguration('rvizconfig')],
     )
+    # diff_drive_spawner = launch_ros.actions.Node(
+    #     package="controller_manager",
+    #     executable="spawner.py",
+    #     arguments=["diff_cont"],
+    # )
+    # joint_broad_spawner = launch_ros.actions.Node(
+    #     package="controller_manager",
+    #     executable="spawner.py",
+    #     arguments=["joint_broad"],
+    # )
 
     return launch.LaunchDescription([
         launch.actions.DeclareLaunchArgument(name='gui', default_value='True',
@@ -43,5 +53,7 @@ def generate_launch_description():
         joint_state_publisher_node,
         joint_state_publisher_gui_node,
         robot_state_publisher_node,
-        rviz_node
+        rviz_node,
+        # diff_drive_spawner,
+        # joint_broad_spawner
     ])
