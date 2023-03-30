@@ -16,8 +16,11 @@ find_package(geometry_msgs REQUIRED)
 add_executable(odom_pub publishers/odometry_twist_publisher.cpp)
 ament_target_dependencies(odom_pub rclcpp geometry_msgs)
 
+add_executable(odom_sub subscribers/odometry_twist_subscriber.cpp)
+ament_target_dependencies(odom_sub rclcpp geometry_msgs)
+
 install(
-  TARGETS odom_pub
+  TARGETS odom_pub odom_sub
   DIRECTORY src launch rviz
   DESTINATION share/${PROJECT_NAME}
 )
