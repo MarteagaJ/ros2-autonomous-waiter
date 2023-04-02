@@ -1,7 +1,10 @@
 import launch
 from launch.substitutions import Command, LaunchConfiguration
+from launch.actions import TimerAction, RegisterEventHandler
+from launch.event_handlers import OnProcessStart
 import launch_ros
 import os
+from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
     pkg_share = launch_ros.substitutions.FindPackageShare(package='autonomous_waiter_description').find('autonomous_waiter_description')
@@ -32,6 +35,43 @@ def generate_launch_description():
         output='screen',
         arguments=['-d', LaunchConfiguration('rvizconfig')],
     )
+
+    controller_params_file = os.path.join(get_package_share_directory("autonomous_waiter_description"),'config','my_controllers.yaml')
+
+    controller_manager = launch_ros.actions.Node(
+        package="controller_manager",
+        executable="ros2_control_node",
+        parameters=[{'robot_description': Command(['xacro ', LaunchConfiguration('model')])},
+                    controller_params_file]
+    )
+
+    delayed_controller_manager = TimerAction(period=3.0, actions=[controller_manager])
+
+    diff_drive_spawner = launch_ros.actions.Node(
+        package="controller_manager",
+        executable="spawner.py",
+        arguments=["diff_cont"],
+    )
+
+    delayed_diff_drive_spawner = RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=controller_manager,
+            on_start=[diff_drive_spawner],
+        )
+    )
+
+    joint_broad_spawner = launch_ros.actions.Node(
+        package="controller_manager",
+        executable="spawner.py",
+        arguments=["joint_broad"],
+    )
+
+    delayed_joint_broad_spawner = RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=controller_manager,
+            on_start=[joint_broad_spawner],
+        )
+    )
     # diff_drive_spawner = launch_ros.actions.Node(
     #     package="controller_manager",
     #     executable="spawner.py",
@@ -54,6 +94,7 @@ def generate_launch_description():
         joint_state_publisher_gui_node,
         robot_state_publisher_node,
         rviz_node,
-        # diff_drive_spawner,
-        # joint_broad_spawner
+        delayed_controller_manager,
+        delayed_diff_drive_spawner,
+        delayed_joint_broad_spawner
     ])
