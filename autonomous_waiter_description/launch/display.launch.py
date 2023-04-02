@@ -8,8 +8,8 @@ from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
     pkg_share = launch_ros.substitutions.FindPackageShare(package='autonomous_waiter_description').find('autonomous_waiter_description')
-    default_model_path = os.path.join(pkg_share, 'src/description/autonomous_waiter_description.urdf')
-    default_rviz_config_path = os.path.join(pkg_share, 'rviz/urdf_config.rviz')
+    default_model_path = os.path.join(pkg_share, 'description/autonomous_waiter_description.urdf')
+    default_rviz_config_path = os.path.join(pkg_share, 'config/urdf_config.rviz')
 
     robot_state_publisher_node = launch_ros.actions.Node(
         package='robot_state_publisher',
