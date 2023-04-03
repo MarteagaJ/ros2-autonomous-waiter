@@ -2,6 +2,9 @@
 .vscode/
 
 # ros2 generated files
+build
+install
+log
 autonomous_waiter_description/build
 autonomous_waiter_description/install
 autonomous_waiter_description/log
