@@ -45,10 +45,10 @@
         </joint>
     </ros2_control>
 
-    <gazebo>
+    <!-- <gazebo>
         <plugin name="diff_drive" filename="libgazebo_ros2_control.so">
             <parameters>$(find autonomous_waiter_description)/config/my_controllers.yaml</parameters>
         </plugin>
-    </gazebo>
+    </gazebo> -->
 
 </robot>

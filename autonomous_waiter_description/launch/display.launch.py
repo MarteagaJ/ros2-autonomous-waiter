@@ -22,19 +22,19 @@ def generate_launch_description():
         name='joint_state_publisher',
         condition=launch.conditions.UnlessCondition(LaunchConfiguration('gui'))
     )
-    joint_state_publisher_gui_node = launch_ros.actions.Node(
-        package='joint_state_publisher_gui',
-        executable='joint_state_publisher_gui',
-        name='joint_state_publisher_gui',
-        condition=launch.conditions.IfCondition(LaunchConfiguration('gui'))
-    )
-    rviz_node = launch_ros.actions.Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        output='screen',
-        arguments=['-d', LaunchConfiguration('rvizconfig')],
-    )
+    # joint_state_publisher_gui_node = launch_ros.actions.Node(
+    #     package='joint_state_publisher_gui',
+    #     executable='joint_state_publisher_gui',
+    #     name='joint_state_publisher_gui',
+    #     condition=launch.conditions.IfCondition(LaunchConfiguration('gui'))
+    # )
+    # rviz_node = launch_ros.actions.Node(
+    #     package='rviz2',
+    #     executable='rviz2',
+    #     name='rviz2',
+    #     output='screen',
+    #     arguments=['-d', LaunchConfiguration('rvizconfig')],
+    # )
 
     controller_params_file = os.path.join(get_package_share_directory("autonomous_waiter_description"),'config','my_controllers.yaml')
 
@@ -49,7 +49,7 @@ def generate_launch_description():
 
     diff_drive_spawner = launch_ros.actions.Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=["diff_cont"],
     )
 
@@ -62,7 +62,7 @@ def generate_launch_description():
 
     joint_broad_spawner = launch_ros.actions.Node(
         package="controller_manager",
-        executable="spawner.py",
+        executable="spawner",
         arguments=["joint_broad"],
     )
 
@@ -88,12 +88,13 @@ def generate_launch_description():
                                             description='Flag to enable joint_state_publisher_gui'),
         launch.actions.DeclareLaunchArgument(name='model', default_value=default_model_path,
                                             description='Absolute path to robot urdf file'),
-        launch.actions.DeclareLaunchArgument(name='rvizconfig', default_value=default_rviz_config_path,
-                                            description='Absolute path to rviz config file'),
+        # launch.actions.DeclareLaunchArgument(name='rvizconfig', default_value=default_rviz_config_path,
+        #                                     description='Absolute path to rviz config file'),
         joint_state_publisher_node,
-        joint_state_publisher_gui_node,
+        # joint_state_publisher_gui_node,
         robot_state_publisher_node,
-        rviz_node,
+        # rviz_node,
+        # controller_manager,
         delayed_controller_manager,
         delayed_diff_drive_spawner,
         delayed_joint_broad_spawner
