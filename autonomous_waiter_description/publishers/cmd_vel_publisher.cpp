@@ -18,6 +18,7 @@ public:
     CmdVelPublisher()
         : Node("cmd_vel_publisher"), count_(0)
     {
+        this->declare_parameter("forward_vel", "0");
         publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("cmd_vel_unstamped", 10);
         timer_ = this->create_wall_timer(
             500ms, std::bind(&CmdVelPublisher::timer_callback, this));
@@ -26,9 +27,10 @@ public:
 private:
     void timer_callback()
     {
+        int forward_velocity = std::stoi(this->get_parameter("forward_vel").as_string());
         auto message = geometry_msgs::msg::Twist();
-        message.linear.x = 2.0;
-        message.angular.z = 1.8;
+        message.linear.x = forward_velocity;
+        message.angular.z = 0;
         count_++;
         RCLCPP_INFO(this->get_logger(), "Publishing: LinearX => %lf, AngularZ => %lf", message.linear.x, message.angular.z);
         publisher_->publish(message);
