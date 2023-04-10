@@ -1,11 +1,16 @@
 import keyboard
 import launch
-from launch.substitutions import Command
 import os
+import detect_order
+import magnet
+from launch.substitutions import Command
+
 
 def main(args=None):
 
     while(True):
+        magnet.magnet_test()
+
         if keyboard.is_pressed("0"):
             Command(['ros2 param set /cmd_vel_unstamped 0'])
         elif keyboard.is_pressed("1"):
