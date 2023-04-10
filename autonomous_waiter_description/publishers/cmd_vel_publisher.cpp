@@ -12,15 +12,15 @@ using namespace std::chrono_literals;
  * member function as a callback from the timer. */
 // geometry_msgs/msg/Twist
 
-class OdometryTwistPublisher : public rclcpp::Node
+class CmdVelPublisher : public rclcpp::Node
 {
 public:
-    OdometryTwistPublisher()
-        : Node("odometry_twist_publisher"), count_(0)
+    CmdVelPublisher()
+        : Node("cmd_vel_publisher"), count_(0)
     {
-        publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("odometry", 10);
+        publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("cmd_vel_unstamped", 10);
         timer_ = this->create_wall_timer(
-            500ms, std::bind(&OdometryTwistPublisher::timer_callback, this));
+            500ms, std::bind(&CmdVelPublisher::timer_callback, this));
     }
 
 private:
@@ -41,7 +41,7 @@ private:
 int main(int argc, char *argv[])
 {
     rclcpp::init(argc, argv);
-    rclcpp::spin(std::make_shared<OdometryTwistPublisher>());
+    rclcpp::spin(std::make_shared<CmdVelPublisher>());
     rclcpp::shutdown();
     return 0;
 }
