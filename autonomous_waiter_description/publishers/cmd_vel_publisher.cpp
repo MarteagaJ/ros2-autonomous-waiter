@@ -18,7 +18,7 @@ public:
     CmdVelPublisher()
         : Node("cmd_vel_publisher"), count_(0)
     {
-        this->declare_parameter("forward_vel", "0");
+        this->declare_parameter("forward_vel", 0.0);
         publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("/diff_cont/cmd_vel_unstamped", 10);
         timer_ = this->create_wall_timer(
             500ms, std::bind(&CmdVelPublisher::timer_callback, this));
@@ -27,7 +27,7 @@ public:
 private:
     void timer_callback()
     {
-        int forward_velocity = std::stoi(this->get_parameter("forward_vel").as_string());
+        double forward_velocity = this->get_parameter("forward_vel").as_double();
         auto message = geometry_msgs::msg::Twist();
         message.linear.x = forward_velocity;
         message.angular.z = 0;
