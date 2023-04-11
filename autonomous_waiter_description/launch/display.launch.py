@@ -38,6 +38,12 @@ def generate_launch_description():
 
     controller_params_file = os.path.join(get_package_share_directory("autonomous_waiter_description"),'config','my_controllers.yaml')
 
+    cmd_vel_publisher_node = launch_ros.actions.Node(
+        package='cmd_vel_publisher',
+        executable='cmd_vel_publisher',
+        parameters=[{'forward_vel': "0"}]
+    )
+
     controller_manager = launch_ros.actions.Node(
         package="controller_manager",
         executable="ros2_control_node",
@@ -95,6 +101,7 @@ def generate_launch_description():
         robot_state_publisher_node,
         # rviz_node,
         # controller_manager,
+        cmd_vel_publisher_node,
         delayed_controller_manager,
         delayed_diff_drive_spawner,
         delayed_joint_broad_spawner

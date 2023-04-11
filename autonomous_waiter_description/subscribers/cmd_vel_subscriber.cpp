@@ -11,7 +11,7 @@ class CmdVelSubscriber : public rclcpp::Node
     : Node("cmd_vel_subscriber")
     {
       subscription_ = this->create_subscription<geometry_msgs::msg::Twist>(
-      "cmd_vel_unstamped", 10, std::bind(&CmdVelSubscriber::topic_callback, this, _1));
+      "diff_cont/cmd_vel_unstamped", 10, std::bind(&CmdVelSubscriber::topic_callback, this, _1));
     }
 
   private:
