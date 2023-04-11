@@ -29,7 +29,7 @@
         </hardware>
         <joint name="drivewhl_l_joint">
             <command_interface name="velocity">
-                <param name="min">-10</param>
+                <param name="min">0</param>
                 <param name="max">10</param>
             </command_interface>
             <state_interface name="position"/>
@@ -37,7 +37,7 @@
         </joint>
         <joint name="drivewhl_r_joint">
             <command_interface name="velocity">
-                <param name="min">-10</param>
+                <param name="min">0</param>
                 <param name="max">10</param>
             </command_interface>
             <state_interface name="position"/>
