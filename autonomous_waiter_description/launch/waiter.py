@@ -1,38 +1,86 @@
-import keyboard
-import launch
+# import keyboard
+# import launch
 import os
-import detect_order
-import magnet
-from launch.substitutions import Command
+# import detect_order
+# import magnet
+# from launch.substitutions import Command
+from pynput import keyboard
 
+def on_press(key):
+    try:
+        print("press")
+        if key.char == '0':
+            print('alphanumeric key {0} pressed'.format(
+            key.char))
+            # output=Command(['ros2 param set /cmd_vel_publisher forward_vel 0'])
+        elif key.char == '1':
+            print('alphanumeric key {0} pressed'.format(
+            key.char))
+            # output=Command(['ros2 param set /cmd_vel_publisher forward_vel 1'])
+        elif key.char == '2':
+            print('alphanumeric key {0} pressed'.format(
+            key.char))
+            # output=Command(['ros2 param set /cmd_vel_publisher forward_vel 2'])
+        elif key.char == '3':
+            print('alphanumeric key {0} pressed'.format(
+            key.char))
+            # output=Command(['ros2 param set /cmd_vel_publisher forward_vel 3'])
+        elif key.char == '4':
+            print('alphanumeric key {0} pressed'.format(
+            key.char))
+            # output=Command(['ros2 param set /cmd_vel_publisher forward_vel 4'])
+        elif key.char == '5':
+            print('alphanumeric key {0} pressed'.format(
+            key.char))
+            # output=Command(['ros2 param set /cmd_vel_publisher forward_vel 5'])
+        elif key.char == '6':
+            print('alphanumeric key {0} pressed'.format(
+            key.char))
+            # output=Command(['ros2 param set /cmd_vel_publisher forward_vel 6'])
+        elif key.char == '7':
+            print('alphanumeric key {0} pressed'.format(
+            key.char))
+            # output=Command(['ros2 param set /cmd_vel_publisher forward_vel 7'])
+        elif key.char == '8':
+            print('alphanumeric key {0} pressed'.format(
+            key.char))
+            # output=Command(['ros2 param set /cmd_vel_publisher forward_vel 8'])
+        elif key.char == '9':
+            print('alphanumeric key {0} pressed'.format(
+            key.char))
+            # output=Command(['ros2 param set /cmd_vel_publisher forward_vel 9'])
+        else:
+            print('alphanumeric key {0} pressed'.format(
+            key.char))
+            # output=Command(['ros2 param set /cmd_vel_publisher forward_vel 0'])
+    except AttributeError:
+        print('special key {0} pressed'.format(
+            key))
+
+def on_release(key):
+    print('{0} released'.format(
+        key))
+    if key == keyboard.Key.esc:
+        # Stop listener
+        return False
 
 def main(args=None):
+    listener = keyboard.Listener(
+    on_press=on_press,
+    on_release=on_release)
+    
+    listener.start()
+
+    # Collect events until released
+    # with keyboard.Listener(
+    #         on_press=on_press,
+    #         on_release=on_release) as listener:
+    #     listener.join()
 
     while(True):
-        magnet.magnet_test()
-
-        if keyboard.is_pressed("0"):
-            Command(['ros2 param set /cmd_vel_publisher forward_vel 0'])
-        elif keyboard.is_pressed("1"):
-            Command(['ros2 param set /cmd_vel_publisher forward_vel 1'])
-        elif keyboard.is_pressed("2"):
-            Command(['ros2 param set /cmd_vel_publisher forward_vel 2'])
-        elif keyboard.is_pressed("3"):
-            Command(['ros2 param set /cmd_vel_publisher forward_vel 3'])
-        elif keyboard.is_pressed("4"):
-            Command(['ros2 param set /cmd_vel_publisher forward_vel 4'])
-        elif keyboard.is_pressed("5"):
-            Command(['ros2 param set /cmd_vel_publisher forward_vel 5'])
-        elif keyboard.is_pressed("6"):
-            Command(['ros2 param set /cmd_vel_publisher forward_vel 6'])
-        elif keyboard.is_pressed("7"):
-            Command(['ros2 param set /cmd_vel_publisher forward_vel 7'])
-        elif keyboard.is_pressed("8"):
-            Command(['ros2 param set /cmd_vel_publisher forward_vel 8'])
-        elif keyboard.is_pressed("9"):
-            Command(['ros2 param set /cmd_vel_publisher forward_vel 9'])
-        else:
-            Command(['ros2 param set /cmd_vel_publisher forward_vel 0'])
+        # print("test")
+        continue
+        # magnet.magnet_test()
 
 if __name__ == '__main__':
     main()

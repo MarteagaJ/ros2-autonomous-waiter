@@ -19,7 +19,7 @@ public:
         : Node("cmd_vel_publisher"), count_(0)
     {
         this->declare_parameter("forward_vel", "0");
-        publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("diff_cont/cmd_vel_unstamped", 10);
+        publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("/diff_cont/cmd_vel_unstamped", 10);
         timer_ = this->create_wall_timer(
             500ms, std::bind(&CmdVelPublisher::timer_callback, this));
     }
