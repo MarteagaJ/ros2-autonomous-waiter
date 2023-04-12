@@ -86,11 +86,11 @@ def main(args=None):
     while(True):
         # print("test")
         for i in range(10):
-            sleep(4)
+            sleep(2)
             # os.system('cmd "ros2 param set /cmd_vel_publisher forward_vel {}"'.format(i))
             # output=Command(['ros2 param set /cmd_vel_publisher forward_vel {}'.format(float(i))])
-            set_velocity(float(i))
-            print("Current Velocity Set: {}".format(i))
+            set_velocity(float(i)/10.0)
+            print("Current Velocity Set: {}".format(float(i)/10.0))
         # magnet.magnet_test()
 
 if __name__ == '__main__':
