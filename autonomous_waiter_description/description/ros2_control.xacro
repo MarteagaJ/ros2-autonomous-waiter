@@ -27,7 +27,7 @@
         <hardware>
             <plugin>diff_drive_pico/DiffDrivePico</plugin>
         </hardware>
-        <joint name="drivewhl_l_joint">
+        <joint name="wheel_l_joint">
             <command_interface name="velocity">
                 <param name="min">0</param>
                 <param name="max">10</param>
@@ -35,7 +35,7 @@
             <state_interface name="position"/>
             <state_interface name="velocity"/>
         </joint>
-        <joint name="drivewhl_r_joint">
+        <joint name="wheel_r_joint">
             <command_interface name="velocity">
                 <param name="min">0</param>
                 <param name="max">10</param>

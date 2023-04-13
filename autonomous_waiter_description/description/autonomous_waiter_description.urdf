@@ -68,38 +68,61 @@
   </joint>
 
   <!-- Wheels -->
-  <xacro:macro name="wheel" params="prefix x_reflect y_reflect">
-    <link name="${prefix}_link">
-      <visual>
-        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
-        <geometry>
-            <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
-        </geometry>
-        <material name="Gray">
-          <color rgba="0.5 0.5 0.5 1.0"/>
-        </material>
-      </visual>
-
-      <collision>
-        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
-        <geometry>
+  <link name="wheel_l_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+      <geometry>
           <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
-        </geometry>
-      </collision>
+      </geometry>
+      <material name="Gray">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
 
-      <xacro:cylinder_inertia m="0.5" r="${wheel_radius}" h="${wheel_width}"/>
-    </link>
+    <collision>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+      </geometry>
+    </collision>
 
-    <joint name="${prefix}_joint" type="continuous">
-      <parent link="base_link"/>
-      <child link="${prefix}_link"/>
-      <origin xyz="${x_reflect*wheel_xoff} ${y_reflect*(base_width/2+wheel_ygap)} ${-wheel_zoff}" rpy="0 0 0"/>
-      <axis xyz="0 1 0"/>
-    </joint>
-  </xacro:macro>
+    <xacro:cylinder_inertia m="0.5" r="${wheel_radius}" h="${wheel_width}"/>
+  </link>
 
-  <xacro:wheel prefix="drivewhl_l" x_reflect="1" y_reflect="1" />
-  <xacro:wheel prefix="drivewhl_r" x_reflect="1" y_reflect="-1" />
+  <link name="wheel_r_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+      <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+      </geometry>
+      <material name="Gray">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+      </geometry>
+    </collision>
+
+    <xacro:cylinder_inertia m="0.5" r="${wheel_radius}" h="${wheel_width}"/>
+  </link>
+
+  <joint name="wheel_l_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_l_link"/>
+    <origin xyz="${1*wheel_xoff} ${1*(base_width/2+wheel_ygap)} ${-wheel_zoff}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <joint name="wheel_r_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_r_link"/>
+    <origin xyz="${1*wheel_xoff} ${-1*(base_width/2+wheel_ygap)} ${-wheel_zoff}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
 
   <!-- Caster Wheel -->
   <link name="front_caster">
@@ -130,7 +153,6 @@
 
   <xacro:include filename="ros2_control.xacro" />
   <xacro:include filename="lidar.xacro" />
-  <!-- <xacro:include filename="lidar.xacro" />
-  <xacro:include filename="camera.xacro" /> -->
+  <!-- <xacro:include filename="camera.xacro" /> -->
 
 </robot>

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-  <link name="lidar_link">
+  <link name="laser_frame">
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <mass value="0.125"/>
@@ -24,11 +24,11 @@
 
   <joint name="lidar_joint" type="fixed">
     <parent link="base_link"/>
-    <child link="lidar_link"/>
+    <child link="laser_frame"/>
     <origin xyz="0 0 0.12" rpy="0 0 0"/>
   </joint>
 
-  <gazebo reference="lidar_link">
+  <!-- <gazebo reference="lidar_link">
     <sensor name="lidar" type="ray">
       <always_on>true</always_on>
       <visualize>true</visualize>
@@ -61,5 +61,5 @@
         <frame_name>lidar_link</frame_name>
       </plugin>
     </sensor>
-  </gazebo>
+  </gazebo> -->
 </robot>
