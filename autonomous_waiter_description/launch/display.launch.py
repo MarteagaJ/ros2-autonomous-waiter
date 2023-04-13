@@ -10,6 +10,7 @@ def generate_launch_description():
     pkg_share = launch_ros.substitutions.FindPackageShare(package='autonomous_waiter_description').find('autonomous_waiter_description')
     default_model_path = os.path.join(pkg_share, 'description/autonomous_waiter_description.urdf')
     default_rviz_config_path = os.path.join(pkg_share, 'config/urdf_config.rviz')
+    default_slam_params_file = os.path.join(pkg_share, 'config/mapper_params_online_async.yaml')
 
     robot_state_publisher_node = launch_ros.actions.Node(
         package='robot_state_publisher',
@@ -90,6 +91,23 @@ def generate_launch_description():
             'scan_mode': 'Standard'
         }]
     )
+
+    slam_node = launch_ros.actions.Node(
+        package='slam_toolbox',
+        executable='async_slam_toolbox_node',
+        output='screen',
+        parameters=[
+          default_slam_params_file,
+          {'use_sim_time': False}
+        ]
+    )
+
+    delayed_slam_node = RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=rplidar_node,
+            on_start=[slam_node],
+        )
+    )
     # diff_drive_spawner = launch_ros.actions.Node(
     #     package="controller_manager",
     #     executable="spawner.py",
@@ -117,5 +135,7 @@ def generate_launch_description():
         delayed_controller_manager,
         delayed_diff_drive_spawner,
         delayed_joint_broad_spawner,
-        rplidar_node
+        rplidar_node,
+        # slam_node
+        delayed_slam_node
     ])
