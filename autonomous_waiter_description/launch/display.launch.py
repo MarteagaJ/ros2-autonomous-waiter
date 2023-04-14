@@ -11,6 +11,7 @@ def generate_launch_description():
     default_model_path = os.path.join(pkg_share, 'description/autonomous_waiter_description.urdf')
     default_rviz_config_path = os.path.join(pkg_share, 'config/urdf_config.rviz')
     default_slam_params_file = os.path.join(pkg_share, 'config/mapper_params_online_async.yaml')
+    default_ekf_params_file = os.path.join(pkg_share, 'config/ekf.yaml')
 
     robot_state_publisher_node = launch_ros.actions.Node(
         package='robot_state_publisher',
@@ -53,6 +54,21 @@ def generate_launch_description():
     )
 
     delayed_controller_manager = TimerAction(period=3.0, actions=[controller_manager])
+
+    robot_localization_node = launch_ros.actions.Node(
+       package='robot_localization',
+       executable='ekf_node',
+       name='ekf_filter_node',
+       output='screen',
+       parameters=[default_ekf_params_file, {'use_sim_time': LaunchConfiguration('use_sim_time')}]
+    )
+
+    delayed_robot_localization_node = RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=controller_manager,
+            on_start=[robot_localization_node],
+        )
+    )
 
     diff_drive_spawner = launch_ros.actions.Node(
         package="controller_manager",
@@ -124,18 +140,21 @@ def generate_launch_description():
                                             description='Flag to enable joint_state_publisher_gui'),
         launch.actions.DeclareLaunchArgument(name='model', default_value=default_model_path,
                                             description='Absolute path to robot urdf file'),
+        launch.actions.DeclareLaunchArgument(name='use_sim_time', default_value='True',
+                                            description='Flag to enable use_sim_time'),
         # launch.actions.DeclareLaunchArgument(name='rvizconfig', default_value=default_rviz_config_path,
         #                                     description='Absolute path to rviz config file'),
         robot_state_publisher_node,
         # joint_state_publisher_node,
         # joint_state_publisher_gui_node,
-        # rviz_node,
         # controller_manager,
         # cmd_vel_publisher_node,
         delayed_controller_manager,
+        delayed_robot_localization_node,
         delayed_diff_drive_spawner,
         delayed_joint_broad_spawner,
         rplidar_node,
         # slam_node
-        delayed_slam_node
+        delayed_slam_node,
+        # rviz_node
     ])
