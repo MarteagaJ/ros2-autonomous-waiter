@@ -18,25 +18,25 @@ def generate_launch_description():
         executable='robot_state_publisher',
         parameters=[{'robot_description': Command(['xacro ', LaunchConfiguration('model')])}]
     )
-    # joint_state_publisher_node = launch_ros.actions.Node(
-    #     package='joint_state_publisher',
-    #     executable='joint_state_publisher',
-    #     name='joint_state_publisher',
-    #     condition=launch.conditions.UnlessCondition(LaunchConfiguration('gui'))
-    # )
-    # joint_state_publisher_gui_node = launch_ros.actions.Node(
-    #     package='joint_state_publisher_gui',
-    #     executable='joint_state_publisher_gui',
-    #     name='joint_state_publisher_gui',
-    #     condition=launch.conditions.IfCondition(LaunchConfiguration('gui'))
-    # )
-    # rviz_node = launch_ros.actions.Node(
-    #     package='rviz2',
-    #     executable='rviz2',
-    #     name='rviz2',
-    #     output='screen',
-    #     arguments=['-d', default_rviz_config_path],
-    # )
+    joint_state_publisher_node = launch_ros.actions.Node(
+        package='joint_state_publisher',
+        executable='joint_state_publisher',
+        name='joint_state_publisher',
+        condition=launch.conditions.UnlessCondition(LaunchConfiguration('gui'))
+    )
+    joint_state_publisher_gui_node = launch_ros.actions.Node(
+        package='joint_state_publisher_gui',
+        executable='joint_state_publisher_gui',
+        name='joint_state_publisher_gui',
+        condition=launch.conditions.IfCondition(LaunchConfiguration('gui'))
+    )
+    rviz_node = launch_ros.actions.Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        output='screen',
+        arguments=['-d', default_rviz_config_path],
+    )
 
     controller_params_file = os.path.join(get_package_share_directory("autonomous_waiter_description"),'config','my_controllers.yaml')
 
@@ -55,20 +55,20 @@ def generate_launch_description():
 
     delayed_controller_manager = TimerAction(period=3.0, actions=[controller_manager])
 
-    robot_localization_node = launch_ros.actions.Node(
-       package='robot_localization',
-       executable='ekf_node',
-       name='ekf_filter_node',
-       output='screen',
-       parameters=[default_ekf_params_file, {'use_sim_time': LaunchConfiguration('use_sim_time')}]
-    )
+    # robot_localization_node = launch_ros.actions.Node(
+    #    package='robot_localization',
+    #    executable='ekf_node',
+    #    name='ekf_filter_node',
+    #    output='screen',
+    #    parameters=[default_ekf_params_file, {'use_sim_time': LaunchConfiguration('use_sim_time')}]
+    # )
 
-    delayed_robot_localization_node = RegisterEventHandler(
-        event_handler=OnProcessStart(
-            target_action=controller_manager,
-            on_start=[robot_localization_node],
-        )
-    )
+    # delayed_robot_localization_node = RegisterEventHandler(
+    #     event_handler=OnProcessStart(
+    #         target_action=controller_manager,
+    #         on_start=[robot_localization_node],
+    #     )
+    # )
 
     diff_drive_spawner = launch_ros.actions.Node(
         package="controller_manager",
@@ -96,34 +96,34 @@ def generate_launch_description():
         )
     )
 
-    rplidar_node = launch_ros.actions.Node(
-        package='rplidar_ros',
-        executable='rplidar_composition',
-        output='screen',
-        parameters=[{
-            'serial_port': '/dev/serial/by-path/platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.3:1.0-port0',
-            'frame_id': 'laser_link',
-            'angle_compensate': True,
-            'scan_mode': 'Standard'
-        }]
-    )
+    # rplidar_node = launch_ros.actions.Node(
+    #     package='rplidar_ros',
+    #     executable='rplidar_composition',
+    #     output='screen',
+    #     parameters=[{
+    #         'serial_port': '/dev/serial/by-path/platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.3:1.0-port0',
+    #         'frame_id': 'laser_link',
+    #         'angle_compensate': True,
+    #         'scan_mode': 'Standard'
+    #     }]
+    # )
 
-    slam_node = launch_ros.actions.Node(
-        package='slam_toolbox',
-        executable='async_slam_toolbox_node',
-        output='screen',
-        parameters=[
-          default_slam_params_file,
-          {'use_sim_time': False}
-        ]
-    )
+    # slam_node = launch_ros.actions.Node(
+    #     package='slam_toolbox',
+    #     executable='async_slam_toolbox_node',
+    #     output='screen',
+    #     parameters=[
+    #       default_slam_params_file,
+    #       {'use_sim_time': False}
+    #     ]
+    # )
 
-    delayed_slam_node = RegisterEventHandler(
-        event_handler=OnProcessStart(
-            target_action=rplidar_node,
-            on_start=[slam_node],
-        )
-    )
+    # delayed_slam_node = RegisterEventHandler(
+    #     event_handler=OnProcessStart(
+    #         target_action=rplidar_node,
+    #         on_start=[slam_node],
+    #     )
+    # )
     # diff_drive_spawner = launch_ros.actions.Node(
     #     package="controller_manager",
     #     executable="spawner.py",
@@ -145,16 +145,14 @@ def generate_launch_description():
         # launch.actions.DeclareLaunchArgument(name='rvizconfig', default_value=default_rviz_config_path,
         #                                     description='Absolute path to rviz config file'),
         robot_state_publisher_node,
-        # joint_state_publisher_node,
-        # joint_state_publisher_gui_node,
-        # controller_manager,
-        # cmd_vel_publisher_node,
+        joint_state_publisher_node,
+        joint_state_publisher_gui_node,
         delayed_controller_manager,
-        delayed_robot_localization_node,
+        # delayed_robot_localization_node,
         delayed_diff_drive_spawner,
         delayed_joint_broad_spawner,
-        rplidar_node,
+        # rplidar_node,
         # slam_node
-        delayed_slam_node,
-        # rviz_node
+        # delayed_slam_node,
+        rviz_node
     ])
