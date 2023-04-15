@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-  <link name="laser_frame">
+  <link name="laser_link">
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <mass value="0.125"/>
@@ -24,7 +24,7 @@
 
   <joint name="lidar_joint" type="fixed">
     <parent link="base_link"/>
-    <child link="laser_frame"/>
+    <child link="laser_link"/>
     <origin xyz="0 0 0.12" rpy="0 0 0"/>
   </joint>
 
