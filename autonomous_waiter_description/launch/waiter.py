@@ -89,8 +89,8 @@ def main(args=None):
             sleep(1)
             # os.system('cmd "ros2 param set /cmd_vel_publisher forward_vel {}"'.format(i))
             # output=Command(['ros2 param set /cmd_vel_publisher forward_vel {}'.format(float(i))])
-            set_velocity(float(i)/100.0)
-            print("Current Velocity Set: {}".format(float(i)/100.0))
+            set_velocity(float(i)/10.0)
+            print("Current Velocity Set: {}".format(float(i)/10.0))
         # magnet.magnet_test()
 
 if __name__ == '__main__':
