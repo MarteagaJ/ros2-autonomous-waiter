@@ -66,8 +66,10 @@ from time import sleep
 #         # Stop listener
 #         return False
 
-def set_velocity(velocity: float):
-    cmd_str = "ros2 param set /cmd_vel_publisher forward_vel {}".format(float(velocity))
+def set_velocity(x_velocity: float, z_velocity: float):
+    cmd_str = "ros2 topic pub --once /diff_cont/cmd_vel_unstamped geometry_msgs/msg/Twist \"" + "{" + "linear: " + "{" + "x: {}, y: 0.0, z: 0.0".format(x_velocity) + "}" + ", angular: " + "{" + "x: 0.0, y: 0.0, z: {}".format(z_velocity) + "}" + "}\""
+    # print(cmd_str)
+    # cmd_str = "ros2 param set /cmd_vel_publisher forward_vel {}".format(float(velocity))
     subprocess.run(cmd_str, shell=True)
 
 def main(args=None):
@@ -83,14 +85,17 @@ def main(args=None):
     #         on_release=on_release) as listener:
     #     listener.join()
 
+    # set_velocity(float(2)/10.0, 0.0)
+
     while(True):
         # print("test")
-        for i in range(10):
-            sleep(1)
+        for i in range(9):
+            # sleep(4)
             # os.system('cmd "ros2 param set /cmd_vel_publisher forward_vel {}"'.format(i))
             # output=Command(['ros2 param set /cmd_vel_publisher forward_vel {}'.format(float(i))])
-            set_velocity(float(i)/10.0)
-            print("Current Velocity Set: {}".format(float(i)/10.0))
+            set_velocity(float(i)/10.0, 0.0)
+            # print("Current Velocity Set: " + "{" + "linear: " + "{" + "x: {}, y: 0.0, z: 0.0".format(float(i)/10.0) + "}" + ", angular: " + "{" + "x: 0.0, y: 0.0, z: {}".format(0.0) + "}" + "}\"")
+            # HELPFUL TOPIC INTROSPECTION COMMAND: ros2 topic echo <topic_name>
         # magnet.magnet_test()
 
 if __name__ == '__main__':
