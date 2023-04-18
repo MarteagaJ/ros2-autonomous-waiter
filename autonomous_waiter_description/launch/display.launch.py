@@ -49,6 +49,7 @@ def generate_launch_description():
     controller_manager = launch_ros.actions.Node(
         package="controller_manager",
         executable="ros2_control_node",
+        # arguments=['--ros-args', '--log-level', "debug"],
         parameters=[{'robot_description': Command(['xacro ', LaunchConfiguration('model')])},
                     controller_params_file, {'use_sim_time': LaunchConfiguration('use_sim_time')}]
     )
@@ -73,7 +74,8 @@ def generate_launch_description():
     diff_drive_spawner = launch_ros.actions.Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["diff_cont"],
+        arguments=["diff_cont"]
+        # arguments=["diff_cont", '--ros-args', '--log-level', "debug"],
     )
 
     delayed_diff_drive_spawner = RegisterEventHandler(
@@ -86,7 +88,8 @@ def generate_launch_description():
     joint_broad_spawner = launch_ros.actions.Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_broad"],
+        arguments=["joint_broad"]
+        # arguments=["joint_broad", '--ros-args', '--log-level', "debug"],
     )
 
     delayed_joint_broad_spawner = RegisterEventHandler(
