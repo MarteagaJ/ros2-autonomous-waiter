@@ -62,19 +62,19 @@ def generate_launch_description():
         name='joint_state_publisher',
         condition=launch.conditions.UnlessCondition(LaunchConfiguration('gui'))
     )
-    joint_state_publisher_gui_node = launch_ros.actions.Node(
-        package='joint_state_publisher_gui',
-        executable='joint_state_publisher_gui',
-        name='joint_state_publisher_gui',
-        condition=launch.conditions.IfCondition(LaunchConfiguration('gui'))
-    )
-    rviz_node = launch_ros.actions.Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        output='screen',
-        arguments=['-d', default_rviz_config_path],
-    )
+    # joint_state_publisher_gui_node = launch_ros.actions.Node(
+    #     package='joint_state_publisher_gui',
+    #     executable='joint_state_publisher_gui',
+    #     name='joint_state_publisher_gui',
+    #     condition=launch.conditions.IfCondition(LaunchConfiguration('gui'))
+    # )
+    # rviz_node = launch_ros.actions.Node(
+    #     package='rviz2',
+    #     executable='rviz2',
+    #     name='rviz2',
+    #     output='screen',
+    #     arguments=['-d', default_rviz_config_path],
+    # )
 
     controller_params_file = os.path.join(get_package_share_directory("autonomous_waiter_description"),'config','my_controllers.yaml')
 
@@ -87,6 +87,7 @@ def generate_launch_description():
     controller_manager = launch_ros.actions.Node(
         package="controller_manager",
         executable="ros2_control_node",
+        # arguments=['--ros-args', '--log-level', "debug"],
         parameters=[{'robot_description': Command(['xacro ', LaunchConfiguration('model')])},
                     controller_params_file, {'use_sim_time': LaunchConfiguration('use_sim_time')}]
     )
@@ -111,7 +112,8 @@ def generate_launch_description():
     diff_drive_spawner = launch_ros.actions.Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["diff_cont"],
+        arguments=["diff_cont"]
+        # arguments=["diff_cont", '--ros-args', '--log-level', "debug"],
     )
 
     delayed_diff_drive_spawner = RegisterEventHandler(
@@ -124,7 +126,8 @@ def generate_launch_description():
     joint_broad_spawner = launch_ros.actions.Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_broad"],
+        arguments=["joint_broad"]
+        # arguments=["joint_broad", '--ros-args', '--log-level', "debug"],
     )
 
     delayed_joint_broad_spawner = RegisterEventHandler(
@@ -278,10 +281,22 @@ def generate_launch_description():
     #     executable="spawner.py",
     #     arguments=["diff_cont"],
     # )
-    # joint_broad_spawner = launch_ros.actions.Node(
-    #     package="controller_manager",
-    #     executable="spawner.py",
-    #     arguments=["joint_broad"],
+
+    # slam_node = launch_ros.actions.Node(
+    #     package='slam_toolbox',
+    #     executable='async_slam_toolbox_node',
+    #     output='screen',
+    #     parameters=[
+    #       default_slam_params_file,
+    #       {'use_sim_time': LaunchConfiguration('use_sim_time')}
+    #     ]
+    # )
+
+    # delayed_slam_node = RegisterEventHandler(
+    #     event_handler=OnProcessStart(
+    #         target_action=rplidar_node,
+    #         on_start=[slam_node],
+    #     )
     # )
 
     return launch.LaunchDescription([
@@ -318,12 +333,12 @@ def generate_launch_description():
         #                                     description='Absolute path to rviz config file'),
         robot_state_publisher_node,
         joint_state_publisher_node,
-        joint_state_publisher_gui_node,
+        # joint_state_publisher_gui_node,
         delayed_controller_manager,
         # delayed_robot_localization_node,
         delayed_diff_drive_spawner,
         delayed_joint_broad_spawner,
-        rplidar_node,
+        # rplidar_node,
         # slam_node
         delayed_slam_node,
         # nav2_controller_server,
