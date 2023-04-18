@@ -25,12 +25,12 @@ diff_cont:
 
     #open_loop: true    
 
-    # wheels_per_side: x
+    wheels_per_side: 1
     # wheel_separation_multiplier: x
     # left_wheel_radius_multiplier: x
     # right_wheel_radius_multiplier: x
 
-    # odom_frame_id: x
+    odom_frame_id: odom
     # pose_covariance_diagonal: x
     # twist_covariance_diagonal: x
     # open_loop: x
