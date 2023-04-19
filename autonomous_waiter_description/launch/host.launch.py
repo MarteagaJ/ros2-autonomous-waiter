@@ -35,7 +35,8 @@ def generate_launch_description():
     # Create our own temporary YAML files that include substitutions
     param_substitutions = {
         'use_sim_time': LaunchConfiguration('use_sim_time'),
-        'default_bt_xml_filename': LaunchConfiguration('default_bt_xml_filename'),
+        'default_nav_through_poses_bt_xml': LaunchConfiguration('default_nav_through_poses_bt_xml'),
+        'default_nav_to_pose_bt_xml': LaunchConfiguration('default_nav_to_pose_bt_xml'),
         'autostart': LaunchConfiguration('autostart'),
         'map_subscribe_transient_local': LaunchConfiguration('map_subscribe_transient_local')
     }
@@ -64,13 +65,13 @@ def generate_launch_description():
     #     name='joint_state_publisher_gui',
     #     condition=launch.conditions.IfCondition(LaunchConfiguration('gui'))
     # )
-    # rviz_node = launch_ros.actions.Node(
-    #     package='rviz2',
-    #     executable='rviz2',
-    #     name='rviz2',
-    #     output='screen',
-    #     arguments=['-d', default_rviz_config_path],
-    # )
+    rviz_node = launch_ros.actions.Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        output='screen',
+        arguments=['-d', default_rviz_config_path],
+    )
 
     nav2_controller_server = launch_ros.actions.Node(
         package='nav2_controller',
@@ -192,10 +193,15 @@ def generate_launch_description():
                                             description='Flag to enable use_sim_time'),
         launch.actions.DeclareLaunchArgument('autostart', default_value='true',
                                             description='Automatically startup the nav2 stack'),
-        launch.actions.DeclareLaunchArgument('default_bt_xml_filename',
+        launch.actions.DeclareLaunchArgument('default_nav_through_poses_bt_xml',
                                             default_value=os.path.join(
                                                 pkg_share,
                                                 'config', 'navigate_through_poses_w_replanning_and_recovery.xml'),
+                                            description='Full path to the behavior tree xml file to use'),
+        launch.actions.DeclareLaunchArgument('default_nav_to_pose_bt_xml',
+                                            default_value=os.path.join(
+                                                pkg_share,
+                                                'config', 'navigate_to_pose_w_replanning_and_recovery.xml'),
                                             description='Full path to the behavior tree xml file to use'),
         launch.actions.DeclareLaunchArgument('nav2_params_file', default_value=os.path.join(pkg_share, 'config', 'nav2_params.yaml'),
                                             description='Full path to the ROS2 parameters file to use'),
@@ -215,13 +221,13 @@ def generate_launch_description():
         # joint_state_publisher_node,
         # joint_state_publisher_gui_node,
         # delayed_nav2_nodes,
-        # rviz_node
-        nav2_controller_server,
-        nav2_smoother_server,
-        nav2_planner_server,
-        nav2_behavior_server,
-        nav2_bt_navigator,
-        nav2_waypoint_follower,
-        nav2_velocity_smoother,
-        nav2_lifecycle_manager
+        rviz_node
+        # nav2_controller_server,
+        # nav2_smoother_server,
+        # nav2_planner_server,
+        # nav2_behavior_server,
+        # nav2_bt_navigator,
+        # nav2_waypoint_follower,
+        # nav2_velocity_smoother,
+        # nav2_lifecycle_manager
     ])
