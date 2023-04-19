@@ -221,13 +221,13 @@ def generate_launch_description():
         # joint_state_publisher_node,
         # joint_state_publisher_gui_node,
         # delayed_nav2_nodes,
-        rviz_node
-        # nav2_controller_server,
-        # nav2_smoother_server,
-        # nav2_planner_server,
-        # nav2_behavior_server,
-        # nav2_bt_navigator,
-        # nav2_waypoint_follower,
-        # nav2_velocity_smoother,
-        # nav2_lifecycle_manager
+        rviz_node,
+        nav2_controller_server,
+        nav2_smoother_server,
+        nav2_planner_server,
+        nav2_behavior_server,
+        nav2_bt_navigator,
+        nav2_waypoint_follower,
+        nav2_velocity_smoother,
+        nav2_lifecycle_manager
     ])
