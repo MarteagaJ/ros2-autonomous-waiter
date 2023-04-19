@@ -45,30 +45,30 @@ def generate_launch_description():
         convert_types=True
     )
 
-    robot_state_publisher_node = launch_ros.actions.Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        parameters=[{'robot_description': Command(['xacro ', LaunchConfiguration('model')])}]
-    )
-    joint_state_publisher_node = launch_ros.actions.Node(
-        package='joint_state_publisher',
-        executable='joint_state_publisher',
-        name='joint_state_publisher',
-        condition=launch.conditions.UnlessCondition(LaunchConfiguration('gui'))
-    )
-    joint_state_publisher_gui_node = launch_ros.actions.Node(
-        package='joint_state_publisher_gui',
-        executable='joint_state_publisher_gui',
-        name='joint_state_publisher_gui',
-        condition=launch.conditions.IfCondition(LaunchConfiguration('gui'))
-    )
-    rviz_node = launch_ros.actions.Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        output='screen',
-        arguments=['-d', default_rviz_config_path],
-    )
+    # robot_state_publisher_node = launch_ros.actions.Node(
+    #     package='robot_state_publisher',
+    #     executable='robot_state_publisher',
+    #     parameters=[{'robot_description': Command(['xacro ', LaunchConfiguration('model')])}]
+    # )
+    # joint_state_publisher_node = launch_ros.actions.Node(
+    #     package='joint_state_publisher',
+    #     executable='joint_state_publisher',
+    #     name='joint_state_publisher',
+    #     condition=launch.conditions.UnlessCondition(LaunchConfiguration('gui'))
+    # )
+    # joint_state_publisher_gui_node = launch_ros.actions.Node(
+    #     package='joint_state_publisher_gui',
+    #     executable='joint_state_publisher_gui',
+    #     name='joint_state_publisher_gui',
+    #     condition=launch.conditions.IfCondition(LaunchConfiguration('gui'))
+    # )
+    # rviz_node = launch_ros.actions.Node(
+    #     package='rviz2',
+    #     executable='rviz2',
+    #     name='rviz2',
+    #     output='screen',
+    #     arguments=['-d', default_rviz_config_path],
+    # )
 
     nav2_controller_server = launch_ros.actions.Node(
         package='nav2_controller',
@@ -165,19 +165,19 @@ def generate_launch_description():
                     {'node_names': lifecycle_nodes}]
     )
 
-    delayed_nav2_nodes = RegisterEventHandler(
-        event_handler=OnProcessStart(
-            target_action=rviz_node,
-            on_start=[nav2_controller_server,
-                nav2_smoother_server,
-                nav2_planner_server,
-                nav2_behavior_server,
-                nav2_bt_navigator,
-                nav2_waypoint_follower,
-                nav2_velocity_smoother,
-                nav2_lifecycle_manager]
-        )
-    )
+    # delayed_nav2_nodes = RegisterEventHandler(
+    #     event_handler=OnProcessStart(
+    #         target_action=robot_state_publisher_node,
+    #         on_start=[nav2_controller_server,
+    #             nav2_smoother_server,
+    #             nav2_planner_server,
+    #             nav2_behavior_server,
+    #             nav2_bt_navigator,
+    #             nav2_waypoint_follower,
+    #             nav2_velocity_smoother,
+    #             nav2_lifecycle_manager]
+    #     )
+    # )
 
     return launch.LaunchDescription([
         # Set env var to print messages to stdout immediately
@@ -192,8 +192,8 @@ def generate_launch_description():
                                             description='Automatically startup the nav2 stack'),
         launch.actions.DeclareLaunchArgument('default_bt_xml_filename',
                                             default_value=os.path.join(
-                                                get_package_share_directory('nav2_bt_navigator'),
-                                                'behavior_trees', 'navigate_w_replanning_and_recovery.xml'),
+                                                pkg_share,
+                                                'config', 'navigate_through_poses_w_replanning_and_recovery.xml'),
                                             description='Full path to the behavior tree xml file to use'),
         launch.actions.DeclareLaunchArgument('nav2_params_file', default_value=os.path.join(pkg_share, 'config', 'nav2_params.yaml'),
                                             description='Full path to the ROS2 parameters file to use'),
@@ -209,9 +209,17 @@ def generate_launch_description():
                                             description='Whether to respawn if a node crashes. Applied when composition is disabled.'),
         launch.actions.DeclareLaunchArgument('log_level', default_value='info',
                                             description='log level'),
-        robot_state_publisher_node,
-        joint_state_publisher_node,
-        joint_state_publisher_gui_node,
-        delayed_nav2_nodes,
-        rviz_node
+        # robot_state_publisher_node,
+        # joint_state_publisher_node,
+        # joint_state_publisher_gui_node,
+        # delayed_nav2_nodes,
+        # rviz_node
+        nav2_controller_server,
+        nav2_smoother_server,
+        nav2_planner_server,
+        nav2_behavior_server,
+        nav2_bt_navigator,
+        nav2_waypoint_follower,
+        nav2_velocity_smoother,
+        nav2_lifecycle_manager
     ])
