@@ -28,14 +28,16 @@ def generate_launch_description():
     #              https://github.com/ros2/launch_ros/issues/56
     remappings = [('/tf', 'tf'),
                   ('/tf_static', 'tf_static'),
-                  ('cmd_vel_nav', '/diff_cont/cmd_vel_unstamped')]
+                #   ('/cmd_vel', '/diff_cont/cmd_vel_unstamped'),
+                #   ('/diff_cont/odom', '/odom')
+                  ]
     
     # Create our own temporary YAML files that include substitutions
     param_substitutions = {
         'use_sim_time': LaunchConfiguration('use_sim_time'),
-        # 'default_bt_xml_filename': LaunchConfiguration('default_bt_xml_filename'),
-        'autostart': LaunchConfiguration('autostart')
-        # 'map_subscribe_transient_local': LaunchConfiguration('map_subscribe_transient_local')
+        'default_bt_xml_filename': LaunchConfiguration('default_bt_xml_filename'),
+        'autostart': LaunchConfiguration('autostart'),
+        'map_subscribe_transient_local': LaunchConfiguration('map_subscribe_transient_local')
     }
 
     nav2_configured_params = RewrittenYaml(
@@ -78,7 +80,7 @@ def generate_launch_description():
         respawn_delay=2.0,
         parameters=[nav2_configured_params],
         arguments=['--ros-args', '--log-level', LaunchConfiguration('log_level')],
-        remappings=remappings + [('cmd_vel', 'cmd_vel_nav')]
+        remappings=remappings + [('/odom', '/diff_cont/odom'), ('cmd_vel', 'cmd_vel_nav')]
     )
 
     nav2_smoother_server = launch_ros.actions.Node(
@@ -114,7 +116,7 @@ def generate_launch_description():
         respawn_delay=2.0,
         parameters=[nav2_configured_params],
         arguments=['--ros-args', '--log-level', LaunchConfiguration('log_level')],
-        remappings=remappings
+        remappings=remappings + [('cmd_vel', '/diff_cont/cmd_vel_unstamped')]
     )
 
     nav2_bt_navigator = launch_ros.actions.Node(
@@ -126,7 +128,7 @@ def generate_launch_description():
         respawn_delay=2.0,
         parameters=[nav2_configured_params],
         arguments=['--ros-args', '--log-level', LaunchConfiguration('log_level')],
-        remappings=remappings
+        remappings=remappings + [('/odom', '/diff_cont/odom')]
     )
 
     nav2_waypoint_follower = launch_ros.actions.Node(
@@ -151,7 +153,7 @@ def generate_launch_description():
         parameters=[nav2_configured_params],
         arguments=['--ros-args', '--log-level', LaunchConfiguration('log_level')],
         remappings=remappings +
-                [('cmd_vel', 'cmd_vel_nav'), ('cmd_vel_smoothed', 'cmd_vel')]
+                [('cmd_vel', 'cmd_vel_nav'), ('cmd_vel_smoothed', '/diff_cont/cmd_vel_unstamped')]
     )
 
     nav2_lifecycle_manager = launch_ros.actions.Node(
