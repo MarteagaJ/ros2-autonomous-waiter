@@ -11,6 +11,18 @@ def generate_launch_description():
     pkg_share = launch_ros.substitutions.FindPackageShare(package='autonomous_waiter_description').find('autonomous_waiter_description')
     default_model_path = os.path.join(pkg_share, 'description/autonomous_waiter_description.urdf')
     default_slam_params_file = os.path.join(pkg_share, 'config/mapper_params_online_async.yaml')
+
+    robot_state_publisher_node = launch_ros.actions.Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        parameters=[{'robot_description': Command(['xacro ', LaunchConfiguration('model')])}]
+    )
+    joint_state_publisher_node = launch_ros.actions.Node(
+        package='joint_state_publisher',
+        executable='joint_state_publisher',
+        name='joint_state_publisher',
+        condition=launch.conditions.UnlessCondition(LaunchConfiguration('gui'))
+    )
     
     controller_params_file = os.path.join(get_package_share_directory("autonomous_waiter_description"),'config','my_controllers.yaml')
 
@@ -112,6 +124,8 @@ def generate_launch_description():
                                             description='Whether to respawn if a node crashes. Applied when composition is disabled.'),
         launch.actions.DeclareLaunchArgument('log_level', default_value='info',
                                             description='log level'),
+        robot_state_publisher_node,
+        joint_state_publisher_node,
         delayed_controller_manager,
         delayed_diff_drive_spawner,
         delayed_joint_broad_spawner,
