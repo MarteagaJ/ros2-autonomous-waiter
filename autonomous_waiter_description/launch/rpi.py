@@ -107,8 +107,8 @@ def generate_launch_description():
                                             description='Automatically startup the nav2 stack'),
         launch.actions.DeclareLaunchArgument('default_bt_xml_filename',
                                             default_value=os.path.join(
-                                                get_package_share_directory('nav2_bt_navigator'),
-                                                'behavior_trees', 'navigate_w_replanning_and_recovery.xml'),
+                                                pkg_share,
+                                                'config', 'navigate_through_poses_w_replanning_and_recovery.xml'),
                                             description='Full path to the behavior tree xml file to use'),
         launch.actions.DeclareLaunchArgument('nav2_params_file', default_value=os.path.join(pkg_share, 'config', 'nav2_params.yaml'),
                                             description='Full path to the ROS2 parameters file to use'),
