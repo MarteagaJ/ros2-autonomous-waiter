@@ -65,13 +65,13 @@ def generate_launch_description():
     #     name='joint_state_publisher_gui',
     #     condition=launch.conditions.IfCondition(LaunchConfiguration('gui'))
     # )
-    rviz_node = launch_ros.actions.Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        output='screen',
-        arguments=['-d', default_rviz_config_path],
-    )
+    # rviz_node = launch_ros.actions.Node(
+    #     package='rviz2',
+    #     executable='rviz2',
+    #     name='rviz2',
+    #     output='screen',
+    #     arguments=['-d', default_rviz_config_path],
+    # )
 
     nav2_controller_server = launch_ros.actions.Node(
         package='nav2_controller',
@@ -189,7 +189,7 @@ def generate_launch_description():
                                             description='Flag to enable joint_state_publisher_gui'),
         launch.actions.DeclareLaunchArgument(name='model', default_value=default_model_path,
                                             description='Absolute path to robot urdf file'),
-        launch.actions.DeclareLaunchArgument(name='use_sim_time', default_value='False',
+        launch.actions.DeclareLaunchArgument(name='use_sim_time', default_value='false',
                                             description='Flag to enable use_sim_time'),
         launch.actions.DeclareLaunchArgument('autostart', default_value='true',
                                             description='Automatically startup the nav2 stack'),
@@ -205,7 +205,7 @@ def generate_launch_description():
                                             description='Full path to the behavior tree xml file to use'),
         launch.actions.DeclareLaunchArgument('nav2_params_file', default_value=os.path.join(pkg_share, 'config', 'nav2_params.yaml'),
                                             description='Full path to the ROS2 parameters file to use'),
-        launch.actions.DeclareLaunchArgument('map_subscribe_transient_local', default_value='false',
+        launch.actions.DeclareLaunchArgument('map_subscribe_transient_local', default_value='true',
                                             description='Whether to set the map subscriber QoS to transient local'),
         launch.actions.DeclareLaunchArgument('namespace', default_value='',
                                             description='Top-level namespace'),
@@ -221,7 +221,7 @@ def generate_launch_description():
         # joint_state_publisher_node,
         # joint_state_publisher_gui_node,
         # delayed_nav2_nodes,
-        rviz_node,
+        # rviz_node,
         nav2_controller_server,
         nav2_smoother_server,
         nav2_planner_server,
