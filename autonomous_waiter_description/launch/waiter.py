@@ -23,7 +23,7 @@ def set_goal_pose(x: float, y: float, z: float, theta: float):
 
 def main(args=None):
     while(True):
-        set_goal_pose(float(0.25), float(0), float(0), float(0))
+        set_goal_pose(float(0.08), float(0), float(0), float(0))
         sleep(300)
         # for i in range(5):
         #     sleep(2)
