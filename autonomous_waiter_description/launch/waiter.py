@@ -23,11 +23,12 @@ def set_goal_pose(x: float, y: float, z: float, theta: float):
 
 def main(args=None):
     while(True):
-        set_goal_pose(float(10), float(17), float(0), float(1.2))
+        set_goal_pose(float(0.25), float(0), float(0), float(0))
         sleep(300)
         # for i in range(5):
         #     sleep(2)
-        #     set_goal_pose(float(i), float(i), float(i), float(i))
+        #     set_velocity(float(i), float(i))
+            # set_goal_pose(float(i), float(i), float(i), float(i))
         # set_velocity(float(0.3), float(0))
 
 if __name__ == '__main__':
