@@ -263,7 +263,9 @@ global_costmap:
 map_server:
   ros__parameters:
     use_sim_time: False
-    yaml_filename: "turtlebot3_world.yaml"
+    yaml_filename: "turtlebot3_world.yaml" #"/home/matthew/Desktop/ros2-autonomous-waiter/matt.posegraph"
+    # topic_name: "map"
+    # frame_id: "map"
 
 map_saver:
   ros__parameters:
@@ -280,7 +282,7 @@ planner_server:
     planner_plugins: ["GridBased"]
     GridBased:
       plugin: "nav2_navfn_planner/NavfnPlanner"
-      tolerance: 0.35
+      tolerance: 0.10
       use_astar: false
       allow_unknown: true
 
