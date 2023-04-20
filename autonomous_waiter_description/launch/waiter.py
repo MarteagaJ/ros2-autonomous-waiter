@@ -1,8 +1,8 @@
 # import launch
 import os
 import subprocess
-# import camera
-# import magnet
+import magnet
+import get_order
 from launch.substitutions import Command
 from time import sleep
 
@@ -22,14 +22,41 @@ def set_goal_pose(x: float, y: float, z: float, theta: float):
     subprocess.run(cmd_str, shell=True)    
 
 def main(args=None):
+    pixel_size = 0.00014
+    focal_length = 0.36
+    pin = 18
+    camera = get_order.Get_Order(pix_siz=pixel_size, foc_len=focal_length)
+    mag = magnet.Magnet(pin)
+    
+    # key poses
+    pickup_window = ()
+    yellow_table = ()
+    red_table = ()
+
     while(True):
-        set_goal_pose(float(0.25), float(0), float(0), float(0))
-        sleep(300)
-        # for i in range(5):
-        #     sleep(2)
-        #     set_velocity(float(i), float(i))
-            # set_goal_pose(float(i), float(i), float(i), float(i))
-        # set_velocity(float(0.3), float(0))
+        # assuming we will start at the pickup_window
+
+        # detect the order
+        color, dist, angle = camera.get_order()
+        mag.magnet_on()
+        # deliver the order
+        if color == 'y':
+            print("detected yellow")
+            set_goal_pose(yellow_table)
+        elif color == 'r':
+            print("detected red")
+            set_goal_pose(red_table)
+        else:
+            print("nothing detected")
+            mag.magnet_off()
+            set_goal_pose(pickup_window)
+            continue
+
+        # assuming we got to the table
+        mag.magnet_off()
+
+        # return to pickup_window
+        set_goal_pose(pickup_window)
 
 if __name__ == '__main__':
     main()
