@@ -6,6 +6,8 @@ build
 install
 log
 mbot_pico_shim
+ros2-diff-drive-pico
+lcm
 autonomous_waiter_description/build
 autonomous_waiter_description/install
 autonomous_waiter_description/log
