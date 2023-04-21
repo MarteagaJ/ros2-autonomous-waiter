@@ -10,7 +10,8 @@ from nav2_common.launch import RewrittenYaml
 def generate_launch_description():
     pkg_share = launch_ros.substitutions.FindPackageShare(package='autonomous_waiter_description').find('autonomous_waiter_description')
     default_model_path = os.path.join(pkg_share, 'description/autonomous_waiter_description.urdf')
-    default_slam_params_file = os.path.join(pkg_share, 'config/mapper_params_online_async.yaml')
+    # default_slam_params_file = os.path.join(pkg_share, 'config/mapper_params_online_async.yaml')
+    default_slam_params_file = os.path.join(pkg_share, 'config/mapper_params_online_sync.yaml')
 
     robot_state_publisher_node = launch_ros.actions.Node(
         package='robot_state_publisher',
@@ -77,14 +78,25 @@ def generate_launch_description():
         }]
     )
 
+    # slam_node = launch_ros.actions.Node(
+    #     package='slam_toolbox',
+    #     executable='async_slam_toolbox_node',
+    #     output='screen',
+    #     parameters=[
+    #       default_slam_params_file,
+    #       {'use_sim_time': LaunchConfiguration('use_sim_time')}
+    #     ]
+    # )
+
     slam_node = launch_ros.actions.Node(
-        package='slam_toolbox',
-        executable='async_slam_toolbox_node',
-        output='screen',
         parameters=[
           default_slam_params_file,
           {'use_sim_time': LaunchConfiguration('use_sim_time')}
-        ]
+        ],
+        package='slam_toolbox',
+        executable='sync_slam_toolbox_node',
+        name='slam_toolbox',
+        output='screen'
     )
 
     delayed_slam_node = RegisterEventHandler(
